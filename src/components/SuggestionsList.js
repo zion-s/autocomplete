@@ -21,7 +21,7 @@ const SuggestionsList = (props) => {
                 className={classname}
                 onClick={() => onSelectSuggestion(index)}
               >
-                {suggestion}
+                {suggestion.name}
               </li>
             );
           })}

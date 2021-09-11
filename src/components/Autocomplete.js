@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
+import suggestions from "../utilities/mock_data.json";
 import SuggestionsList from "./SuggestionsList";
+import axios from "axios";
 import "../App.css";
 
 const Autocomplete = () => {
+  const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [selectedSuggestion, setSelectedSuggestion] = useState(0);
@@ -10,31 +13,31 @@ const Autocomplete = () => {
 
   const searchContainer = useRef(null);
 
-  const suggestions = [
-    "Oathbringer",
-    "American Gods",
-    "A Game of Thrones",
-    "Prince of Thorns",
-    "Assassin's Apprentice",
-    "The Hero of Ages",
-    "The Gunslinger",
-  ];
+  useEffect(() => {
+    const loadUsers = async () => {
+      const response = await axios.get(
+        `https://api.github.com/users/${inputValue}`
+      );
+      console.log(response.data);
+      setUsers(response.data);
+    };
+    inputValue && inputValue.length > 0 && loadUsers();
+  }, [inputValue]);
 
   const onChange = (event) => {
     const value = event.target.value;
     setInputValue(value);
-
-    const filteredSuggestions = suggestions.filter((suggestion) =>
-      suggestion.toLowerCase().includes(value.toLowerCase())
+    const filteredSuggestions = users.filter((user) =>
+      user.name.toLowerCase().includes(value.toLowerCase())
     );
-
+    console.log(filteredSuggestions);
     setFilteredSuggestions(filteredSuggestions);
     setDisplaySuggestions(true);
   };
 
   const onSelectSuggestion = (index) => {
-    setSelectedSuggestion(index);
-    setInputValue(filteredSuggestions[index]);
+    setSelectedSuggestion(filteredSuggestions[index]);
+    setInputValue(filteredSuggestions[index].login);
     setFilteredSuggestions([]);
     setDisplaySuggestions(false);
   };
@@ -56,13 +59,12 @@ const Autocomplete = () => {
   };
 
   return (
-    <div className="input_box">
+    <div className="input_box" ref={searchContainer}>
       <input
         className="user-input"
         type="text"
         onChange={onChange}
         value={inputValue}
-        ref={searchContainer}
       />
       <SuggestionsList
         inputValue={inputValue}

@@ -18,23 +18,31 @@
 .suggestions-list {
   list-style: none;
   padding: 0;
-  max-height: 160px;
+  max-height: 300px;
   overflow-y: auto;
-  max-width: 250px;
+  width: 250px;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  position: absolute;
+  top: 30px;
+}
+.suggestions-list::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 .suggestion {
-  background-color: rgb(226, 181, 181);
+  background-color: rgb(255, 255, 255);
   padding: 10px;
   color: rgb(65, 65, 65);
   cursor: pointer;
 }
 .suggestion:hover {
-  background-color: rgba(238, 238, 238, 0.1);
-}
-.selected {
   background-color: rgb(148, 44, 44);
   color: rgb(238, 223, 223);
 }
+/* .selected {
+  background-color: rgb(148, 44, 44);
+  color: rgb(238, 223, 223);
+} */
 .input_box {
   width: 100vw;
   position: relative;
